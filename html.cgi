@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 
+state(){
+    mosquitto_sub --nodelay -i HELLO -W 1 -t $1 -C 1 | jq -r '.state'
+}
+
+toggle(){
+    mosquitto_pub -t "$1/set" -m '{"state": "TOGGLE"}'
+}
+
 HEAD_HTML=$(cat << EOF
 <!doctype html>
 <html lang="en" id="top">
@@ -35,6 +43,7 @@ FOOTER_HTML=$(cat << EOF
       <li> <a href="./index.cgi">About</a> </li>
       <li> <a href="./presence.cgi">Presence</a> </li>
       <li> <a href="./temperature.cgi">Temperature</a> </li>
+      <li> <a href="./lights.cgi">Lights</a> </li>
       <li> <a href="#top">Back to top &uarr;</a>
     </ul>
   <small>
