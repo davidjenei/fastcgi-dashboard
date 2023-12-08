@@ -1,11 +1,10 @@
 #!/usr/bin/env bash
 
-state(){
-    mosquitto_sub --nodelay -i HELLO -W 1 -t $1 -C 1 | jq -r '.state'
-}
-
-toggle(){
-    mosquitto_pub -t "$1/set" -m '{"state": "TOGGLE"}'
+load_json(){
+while IFS= read -r key; do
+  var_name="`tr '/' '_' <<< $topic`_${key}"
+  eval "${var_name}"="`jq -c -r ".$key" <<< $json`"
+done <<< "`jq -r 'keys[]' <<< $json`"
 }
 
 HEAD_HTML=$(cat << EOF
@@ -40,13 +39,15 @@ FOOTER_HTML=$(cat << EOF
   <hr>
   <h3 id="menu">Navigation</h3>
     <ul>
-      <li> <a href="./index.cgi">About</a> </li>
-      <li> <a href="./presence.cgi">Presence</a> </li>
-      <li> <a href="./temperature.cgi">Temperature</a> </li>
-      <li> <a href="./lights.cgi">Lights</a> </li>
+      <li> <a href="./index.html">About</a> </li>
+      <li> <a href="./presence.html">Presence</a> </li>
+      <li> <a href="./temperature.html">Temperature</a> </li>
+      <li> <a href="./lights.html">Lights</a> </li>
       <li> <a href="#top">Back to top &uarr;</a>
     </ul>
   <small>
+    Last updated: `date`
+    <br>
     The content for this site is
     <a href=
      "http://creativecommons.org/licenses/by-sa/4.0/">CC BY-SA 4.0</a>.
