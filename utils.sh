@@ -3,7 +3,9 @@
 load_json(){
 while IFS= read -r key; do
   var_name="`tr '/' '_' <<< $topic`_${key}"
+  topic_name="_`tr '/' '_' <<< $topic`"
   eval "${var_name}"="`jq -c -r ".$key" <<< $json`"
+  eval "${topic_name}"="`jq -c -r <<< $json`"
 done <<< "`jq -r 'keys[]' <<< $json`"
 }
 
@@ -43,6 +45,7 @@ FOOTER_HTML=$(cat << EOF
       <li> <a href="./presence.html">Presence</a> </li>
       <li> <a href="./temperature.html">Temperature</a> </li>
       <li> <a href="./lights.html">Lights</a> </li>
+      <li> <a href="./vacuum.html">Vacuum</a> </li>
       <li> <a href="#top">Back to top &uarr;</a>
     </ul>
   <small>

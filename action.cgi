@@ -20,6 +20,12 @@ case "$cmd" in
   "camera")
     toggle 'zigbee2mqtt/livingroom/camera' && wait_until
     ;;
+  "vacuumon")
+    mosquitto_pub -t "vacuum/on" -m '' && wait_until
+    ;;
+  "vacuumoff")
+    mosquitto_pub -t "vacuum/off" -m '' && wait_until
+    ;;
 esac
 
 echo "Status: 302 Found"
