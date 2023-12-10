@@ -1,4 +1,5 @@
 HTML_DIR= ../static/home.davidjenei.com
+CONTAINER_HTML_DIR= /static
 PAGES= home-presence home-index home-lights home-temperature home-vacuum
 
 up: $(PAGES)
@@ -11,13 +12,10 @@ restart-%:
 update-%:
 	podman stop $* && podman rm $* && make $*
 
-check-%:
-	-podman container exists $* && exit 1
-
 cgi:
-	-podman run -dt --pod app --name cgi \
-	-v ./cgi-bin:/cgi \
-	-v $(HTML_DIR):/static \
+	-podman run -dt --pod app --name cgi		 \
+	-v $$(pwd)/action.cgi:/cgi/action.cgi		 \
+	-v $(HTML_DIR):$(CONTAINER_HTML_DIR)		 \
 	cgi
 
 build:
@@ -25,8 +23,9 @@ build:
 		&& podman build -t pages -f Containerfile.pages .
 
 home-%:
-	-podman run -dt --pod app --name home-$* \
-	-v $$(pwd):/app \
-	-v $(HTML_DIR):/static \
-	-w /app \
-	pages ./$*.sh /static/$*.html
+	podman run -dt --pod app --name home-$*		\
+	-v $$(pwd)/utils.sh:/app/utils.sh 		\
+	-v $$(pwd)/$*.sh:/app/$*.sh 			\
+	-v $(HTML_DIR):$(CONTAINER_HTML_DIR) 		\
+	-w /app 					\
+	pages ./$*.sh $(CONTAINER_HTML_DIR)/$*.html
