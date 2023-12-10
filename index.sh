@@ -14,7 +14,9 @@ mosquitto_sub -v $TOPICS | while IFS=' ' read topic json; do
     <h1>$TITLE</h1>
     <h2>Status</h2>
     Hostname: $HOSTNAME<br/>
-    Zigbee: $zigbee2mqtt_bridge_state_state
+    System: `uname -a`<br/>
+    Started: `stat /proc/1 | grep "Access:" | tail -n 1 | cut -d' ' -f2- | cut -d'.' -f1`<br/>
+    Zigbee gateway: $zigbee2mqtt_bridge_state_state<br/>
     <h2>About this website</h2>
     This a minimal dashboard for home automation. Uses:
     <ul>
