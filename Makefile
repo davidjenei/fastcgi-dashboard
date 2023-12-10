@@ -1,4 +1,4 @@
-HTML_DIR="../static/home.davidjenei.com"
+HTML_DIR= ../static/home.davidjenei.com
 PAGES= home-presence home-index home-lights home-temperature home-vacuum
 
 up: $(PAGES)
@@ -21,11 +21,12 @@ cgi:
 	cgi
 
 build:
-	podman build -t cgi .
+	podman build -t cgi . \
+		&& podman build -t pages -f Containerfile.pages .
 
 home-%:
 	-podman run -dt --pod app --name home-$* \
 	-v $$(pwd):/app \
-	-v ../static/home.davidjenei.com:/static \
+	-v $(HTML_DIR):/static \
 	-w /app \
-	cgi ./$*.sh /static/$*.html
+	pages ./$*.sh /static/$*.html

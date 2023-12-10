@@ -1,0 +1,5 @@
+FROM debian:bookworm
+
+RUN apt update &&							\
+    apt-get install -y mosquitto-clients jq &&				\
+    rm -rf /var/lib/apt/lists/*

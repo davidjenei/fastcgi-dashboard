@@ -18,12 +18,14 @@ mosquitto_sub -v $TOPICS | while IFS=' ' read topic json; do
     Started: `stat /proc/1 | grep "Access:" | tail -n 1 | cut -d' ' -f2- | cut -d'.' -f1`<br/>
     Zigbee gateway: $zigbee2mqtt_bridge_state_state<br/>
     <h2>About this website</h2>
-    This a minimal dashboard for home automation. Uses:
+    This is a minimal dashboard for home automation. The project uses:
     <ul>
     <li>zigbee2mqtt to collect sensor data</li>
     <li>mosquitto mqtt broker</li>
     <li>bash scripts to generate static pages</li>
     <li>fcgiwrap to handle user actions</li>
+    <li>podman to spawn the scripts in containers</li>
+    <li>gnu make for spawning containers and task automation</li>
     </ul>
     $FOOTER_HTML
     $BODY_END_HTML" > $1
