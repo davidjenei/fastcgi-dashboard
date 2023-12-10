@@ -1,7 +1,8 @@
 FROM debian:bookworm
 
-RUN apt update &&\
-    apt-get install -y spawn-fcgi fcgiwrap mosquitto-clients jq
+RUN apt update &&							\
+    apt-get install -y spawn-fcgi fcgiwrap mosquitto-clients jq &&	\
+    rm -rf /var/lib/apt/lists/*
 
 EXPOSE 9001
 
